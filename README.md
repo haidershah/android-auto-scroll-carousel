@@ -80,11 +80,7 @@ cd android-auto-scroll-carousel
 
 You can also open the project in Android Studio and run the `app` configuration.
 
-## Known issues and next steps
-
-- **The turnaround at the first card is implicit.** The loop relies on `lastScrolledBackward` resetting to `false` when the list reaches its start, rather than checking for the start itself. If that flag ever read `true` at index 0, the next tick would call `animateScrollToItem(-1)`, which Compose rejects with an `IllegalArgumentException`. Checking `canScrollBackward`, or keeping the direction in an explicit variable, would make this turnaround as explicit as the one at the end.
-- **Hoist the scroll logic.** Moving the direction logic into a testable function, and making the interval and card width parameters, would make it easier to unit-test and reuse.
-
 ## Future improvements
 
+- **Hoist the scroll logic.** Moving the direction logic into a testable function, and making the interval and card width parameters, would make it easier to unit-test and reuse.
 - **Handle user drags.** A drag during an auto-scroll animation interrupts that animation and competes with the loop. Auto-scroll could pause while the user is scrolling and resume afterwards.
