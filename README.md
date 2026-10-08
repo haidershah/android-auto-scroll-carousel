@@ -80,7 +80,6 @@ You can also open the project in Android Studio and run the `app` configuration.
 ## Known issues and next steps
 
 - **The backward pass doesn't stop at the first card.** Once the carousel is back at index 0, the next tick calls `animateScrollToItem(-1)`. Compose rejects negative indices with an `IllegalArgumentException`. One fix: when `!canScrollBackward`, scroll forward again (or clamp the target with `coerceAtLeast(0)`).
-- **Some labels don't match their colors.** "Pink" uses `purple_200`, and "Blue" uses `purple_700` but shows the teal hex `#FF018786`. Deriving the hex string from the color resource would keep labels and colors in sync.
 - **Combine the screen state.** The ViewModel has a `// todo uistate` note. The two flows could become one `UiState` data class.
 - **Hoist the scroll logic.** Moving the direction logic into a testable function, and making the interval and card width parameters, would make it easier to unit-test and reuse.
 - **Handle user drags.** A drag during an auto-scroll animation interrupts that animation and competes with the loop. Auto-scroll could pause while the user is scrolling and resume afterwards.

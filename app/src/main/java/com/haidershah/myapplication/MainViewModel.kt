@@ -16,11 +16,11 @@ class MainViewModel : ViewModel() {
 
     init {
         _colorsState.value = listOf(
-            ColorInfo("Pink", "#FFBB86FC", R.color.purple_200),
-            ColorInfo("Blue", "#FF018786", R.color.purple_700),
-            ColorInfo("Green", "#FF018786", R.color.teal_700),
-            ColorInfo("Red", colorHex = "#FF0000", R.color.red),
-            ColorInfo("Yellow", colorHex = "#FFFF00", R.color.yellow),
+            ColorInfo("Light Purple", "#FFBB86FC", R.color.purple_200),
+            ColorInfo("Orange", "#FFFF9800", R.color.orange),
+            ColorInfo("Teal", "#FF018786", R.color.teal_700),
+            ColorInfo("Red", colorHex = "#FFE57373", R.color.red),
+            ColorInfo("Yellow", colorHex = "#FFFFF176", R.color.yellow),
         )
     }
 
