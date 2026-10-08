@@ -59,8 +59,6 @@ flowchart TD
 - **Kotlin Coroutines / Flow** for state and the scroll loop
 - **Android Gradle Plugin** 9.4, `compileSdk`/`targetSdk` 37, `minSdk` 24, Java 11
 
-The build file also declares Retrofit, Coil, DataStore and Navigation Compose. The app doesn't use them yet; they're there so networking, image loading, persistence and multi-screen navigation can be added later.
-
 ## Getting started
 
 ### Requirements
