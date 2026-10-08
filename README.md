@@ -53,6 +53,8 @@ flowchart TD
 
 `LazyListState.lastScrolledBackward` stores the direction, so the loop needs no extra state variable. The "turn around" step scrolls to the first visible card, which is partly off-screen at the end of the list. That scroll goes backward, so `lastScrolledBackward` flips to `true` and later ticks keep moving backward.
 
+At the first card the direction flips back. `lastScrolledBackward` reflects only the most recent scroll frame. When the backward animation reaches the start of the list, its final frame moves zero pixels, so the flag reads `false` and the next tick moves forward again.
+
 ## Tech stack
 
 - **Kotlin** 2.4 with **Jetpack Compose** (Compose BOM `2026.02.01`) and **Material 3**
@@ -80,7 +82,7 @@ You can also open the project in Android Studio and run the `app` configuration.
 
 ## Known issues and next steps
 
-- **The backward pass doesn't stop at the first card.** Once the carousel is back at index 0, the next tick calls `animateScrollToItem(-1)`. Compose rejects negative indices with an `IllegalArgumentException`. One fix: when `!canScrollBackward`, scroll forward again (or clamp the target with `coerceAtLeast(0)`).
+- **The turnaround at the first card is implicit.** The loop relies on `lastScrolledBackward` resetting to `false` when the list reaches its start, rather than checking for the start itself. If that flag ever read `true` at index 0, the next tick would call `animateScrollToItem(-1)`, which Compose rejects with an `IllegalArgumentException`. Checking `canScrollBackward`, or keeping the direction in an explicit variable, would make this turnaround as explicit as the one at the end.
 - **Hoist the scroll logic.** Moving the direction logic into a testable function, and making the interval and card width parameters, would make it easier to unit-test and reuse.
 
 ## Future improvements
