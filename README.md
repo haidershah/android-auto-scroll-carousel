@@ -7,7 +7,7 @@ A small Jetpack Compose app that shows a horizontal carousel of color cards with
 - **Horizontal carousel:** a `LazyRow` of 350dp-wide Material 3 cards. Each card is filled with its color and labeled with the color's name and hex value.
 - **Auto Scroll toggle:** a `Switch` with a tappable label. Turn it on and the carousel advances every 500 ms. Turn it off and it stops.
 - **Ping-pong scrolling:** the carousel moves forward until it can't scroll any further, then changes direction and moves backward.
-- **State that survives rotation:** the color list and the toggle state live in a `ViewModel` and are exposed as `StateFlow`s, so they persist through configuration changes.
+- **State that survives rotation:** the color list and the toggle state live in a single `UiState` held by a `ViewModel`, so they persist through configuration changes.
 - **Edge-to-edge UI:** content is laid out inside a `Scaffold` with system-bar insets applied.
 
 ## How it works
@@ -17,20 +17,21 @@ A small Jetpack Compose app that shows a horizontal carousel of color cards with
 ```
 MainActivity
  └── MainScreen (Composable)
-      ├── collects colorsState      ◄── MainViewModel (StateFlow<List<ColorInfo>>)
-      ├── collects autoScrollState  ◄── MainViewModel (StateFlow<Boolean>)
+      ├── collects uiState  ◄── MainViewModel (StateFlow<UiState>)
+      │                          UiState(colors, isAutoScrollEnabled)
       ├── LazyRow of color Cards
-      └── Switch ── onAutoScrollClicked() ──► MainViewModel toggles state
+      └── Switch ── onAutoScrollClicked() ──► MainViewModel updates UiState
 ```
 
 | File | Responsibility |
 | --- | --- |
 | [`view/MainActivity.kt`](app/src/main/java/com/haidershah/myapplication/view/MainActivity.kt) | Hosts the Compose UI. `MainScreen` renders the carousel, the toggle and the auto-scroll loop. |
-| [`viewmodel/MainViewModel.kt`](app/src/main/java/com/haidershah/myapplication/viewmodel/MainViewModel.kt) | Holds the list of colors and the auto-scroll flag as `StateFlow`s and flips the flag when the toggle is used. |
+| [`viewmodel/MainViewModel.kt`](app/src/main/java/com/haidershah/myapplication/viewmodel/MainViewModel.kt) | Exposes the screen state as a single `StateFlow<UiState>` and flips the auto-scroll flag when the toggle is used. |
+| [`model/UiState.kt`](app/src/main/java/com/haidershah/myapplication/model/UiState.kt) | Immutable screen state: the list of `colors` and `isAutoScrollEnabled`. |
 | [`model/ColorInfo.kt`](app/src/main/java/com/haidershah/myapplication/model/ColorInfo.kt) | Data class for one card: `colorName`, `colorHex` and a color resource ID. |
 | [`ui/theme/`](app/src/main/java/com/haidershah/myapplication/ui/theme) | Material 3 theme, colors and typography. |
 
-State flows one way. The ViewModel owns the state, the UI collects it with `collectAsStateWithLifecycle()`, and user actions go back to the ViewModel as events.
+State flows one way. The ViewModel owns a single `UiState`, the UI collects it with `collectAsStateWithLifecycle()`, and user actions go back to the ViewModel as events. The ViewModel changes state with `MutableStateFlow.update { it.copy(...) }`, so each change produces a new, consistent snapshot.
 
 ### The auto-scroll loop
 
@@ -80,6 +81,5 @@ You can also open the project in Android Studio and run the `app` configuration.
 ## Known issues and next steps
 
 - **The backward pass doesn't stop at the first card.** Once the carousel is back at index 0, the next tick calls `animateScrollToItem(-1)`. Compose rejects negative indices with an `IllegalArgumentException`. One fix: when `!canScrollBackward`, scroll forward again (or clamp the target with `coerceAtLeast(0)`).
-- **Combine the screen state.** The ViewModel has a `// todo uistate` note. The two flows could become one `UiState` data class.
 - **Hoist the scroll logic.** Moving the direction logic into a testable function, and making the interval and card width parameters, would make it easier to unit-test and reuse.
 - **Handle user drags.** A drag during an auto-scroll animation interrupts that animation and competes with the loop. Auto-scroll could pause while the user is scrolling and resume afterwards.

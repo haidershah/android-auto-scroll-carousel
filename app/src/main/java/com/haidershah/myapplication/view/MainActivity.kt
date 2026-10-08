@@ -66,8 +66,9 @@ fun MainScreen(
     val cardWidth = 350.dp
     val cardPadding = 8.dp
 
-    val colors by viewModel.colorsState.collectAsStateWithLifecycle()
-    val isAutoScrollEnabled by viewModel.autoScrollState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val colors = uiState.colors
+    val isAutoScrollEnabled = uiState.isAutoScrollEnabled
 
     val lazyListState = rememberLazyListState()
 
