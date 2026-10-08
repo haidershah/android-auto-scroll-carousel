@@ -1,6 +1,7 @@
-package com.haidershah.myapplication
+package com.haidershah.myapplication.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.haidershah.myapplication.R
 import com.haidershah.myapplication.model.ColorInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -25,8 +25,8 @@ MainActivity
 
 | File | Responsibility |
 | --- | --- |
-| [`MainActivity.kt`](app/src/main/java/com/haidershah/myapplication/MainActivity.kt) | Hosts the Compose UI. `MainScreen` renders the carousel, the toggle and the auto-scroll loop. |
-| [`MainViewModel.kt`](app/src/main/java/com/haidershah/myapplication/MainViewModel.kt) | Holds the list of colors and the auto-scroll flag as `StateFlow`s and flips the flag when the toggle is used. |
+| [`view/MainActivity.kt`](app/src/main/java/com/haidershah/myapplication/view/MainActivity.kt) | Hosts the Compose UI. `MainScreen` renders the carousel, the toggle and the auto-scroll loop. |
+| [`viewmodel/MainViewModel.kt`](app/src/main/java/com/haidershah/myapplication/viewmodel/MainViewModel.kt) | Holds the list of colors and the auto-scroll flag as `StateFlow`s and flips the flag when the toggle is used. |
 | [`model/ColorInfo.kt`](app/src/main/java/com/haidershah/myapplication/model/ColorInfo.kt) | Data class for one card: `colorName`, `colorHex` and a color resource ID. |
 | [`ui/theme/`](app/src/main/java/com/haidershah/myapplication/ui/theme) | Material 3 theme, colors and typography. |
 
